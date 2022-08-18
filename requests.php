@@ -1,5 +1,4 @@
 <?php
-
 /* D. light USSD Application
  * Author : James Tugume
  * Email: jtugume123@gmail.com
@@ -115,56 +114,68 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "view_tokens" && $ussd_string_exploded !== '')
     {
 
-        //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/lasttokens';
-        $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
-        $account_number = $ussd_string;
-
-        $ch = curl_init($url);
-
-        $data = array(
-            'account_number' => $account_number,
-            'MSISDN' => $phone
-        );
-
-        $payload = json_encode($data);
-
-        // Attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-        // Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type:application/json'
-        ));
-
-        // Return response instead of outputting
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute the POST request
-        $result = curl_exec($ch);
-
-        //$response = curl_exec( $ch );
-        $json_resp = json_decode($result, true);
-        $status = $json_resp['status'];
-
-        if ($status == "OK")
+        if (empty($ussd_string_exploded))
         {
-
-            $token = $json_resp['tokens']['token'];
-            $ussd_text = "Token:" . $token;
             $level = "view_tokens";
-            ussd_stop($ussd_text);
+            $ussd_text = "Please Enter Account Number:";
+            ussd_proceed($ussd_text);
             updateSessions($session_id, $level);
-
         }
-
-        if ($status == "FAILED")
+        else
         {
+            // code...
+            //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/lasttokens';
+            $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
+            $account_number = $ussd_string;
 
-            $description = $json_resp['description'];
-            $ussd_text = $description;
-            $level = "view_tokens";
-            ussd_stop($ussd_text);
-            updateSessions($session_id, $level);
+            $ch = curl_init($url);
+
+            $data = array(
+                'account_number' => $account_number,
+                'MSISDN' => $phone
+            );
+
+            $payload = json_encode($data);
+
+            // Attach encoded JSON string to the POST fields
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+            // Set the content type to application/json
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type:application/json'
+            ));
+
+            // Return response instead of outputting
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Execute the POST request
+            $result = curl_exec($ch);
+
+            //$response = curl_exec( $ch );
+            $json_resp = json_decode($result, true);
+            $status = $json_resp['status'];
+
+            if ($status == "OK")
+            {
+
+                $token = $json_resp['tokens']['token'];
+                $ussd_text = "Token:" . $token;
+                $level = "view_tokens";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
+
+            if ($status == "FAILED")
+            {
+
+                $description = $json_resp['description'];
+                $ussd_text = $description;
+                $level = "view_tokens";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
 
         }
 
@@ -181,55 +192,67 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == 'view_tv_tokens' && $ussd_string_exploded !== '')
     {
 
-        //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/lasttokens';
-        $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
-        $account_number = $ussd_string_exploded;
-
-        $ch = curl_init($url);
-
-        $data = array(
-            'account_number' => $account_number,
-            'MSISDN' => $phone
-        );
-
-        $payload = json_encode($data);
-
-        // Attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-        // Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type:application/json'
-        ));
-
-        // Return response instead of outputting
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute the POST request
-        $result = curl_exec($ch);
-
-        $json_resp = json_decode($result, true);
-        $status = $json_resp['status'];
-
-        if ($status == "OK")
+        if (empty($ussd_string_exploded))
         {
-
-            $token = $json_resp['tokens']['token'];
-            $ussd_text = "Token:" . $token;
-            $level = "tv_tokens";
-            ussd_stop($ussd_text);
+            $level = "view_tv_tokens";
+            $ussd_text = "Please Enter Account number:";
+            ussd_proceed($ussd_text);
             updateSessions($session_id, $level);
-
         }
-
-        if ($status == "FAILED")
+        else
         {
+            // code...
+            //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/lasttokens';
+            $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
+            $account_number = $ussd_string_exploded;
 
-            $description = $json_resp['description'];
-            $ussd_text = $description;
-            $level = "tv_tokens";
-            ussd_stop($ussd_text);
-            updateSessions($session_id, $level);
+            $ch = curl_init($url);
+
+            $data = array(
+                'account_number' => $account_number,
+                'MSISDN' => $phone
+            );
+
+            $payload = json_encode($data);
+
+            // Attach encoded JSON string to the POST fields
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+            // Set the content type to application/json
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type:application/json'
+            ));
+
+            // Return response instead of outputting
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Execute the POST request
+            $result = curl_exec($ch);
+
+            $json_resp = json_decode($result, true);
+            $status = $json_resp['status'];
+
+            if ($status == "OK")
+            {
+
+                $token = $json_resp['tokens']['token'];
+                $ussd_text = "Token:" . $token;
+                $level = "tv_tokens";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
+
+            if ($status == "FAILED")
+            {
+
+                $description = $json_resp['description'];
+                $ussd_text = $description;
+                $level = "tv_tokens";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
 
         }
 
@@ -265,39 +288,50 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "add_token" && $ussd_string_exploded !== '')
     {
-        $token_rx = $ussd_string;
-
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        // Check connection
-        if ($link === false)
+        if (empty($ussd_string_exploded))
         {
-            die("ERROR: Could not connect. " . mysqli_connect_error());
-        }
-
-        $sql = "INSERT INTO tokens " . "(token_rx,phone_number) " . "VALUES " . "('$token_rx','$phone')";
-
-        if (mysqli_query($link, $sql))
-        {
-            //echo "Records inserted successfully.";
-            $ussd_text = "Token successfully added!";
-            ussd_stop($ussd_text);
-            $level = "token_rx_end";
-            updateSessions(session_id, $level);
-
+            $ussd_text = "Please enter token number;";
+            $level = "add_token";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
         }
         else
         {
-            //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+            // code...
+            $token_rx = $ussd_string;
 
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            // Check connection
+            if ($link === false)
+            {
+                die("ERROR: Could not connect. " . mysqli_connect_error());
+            }
+
+            $sql = "INSERT INTO tokens " . "(token_rx,phone_number) " . "VALUES " . "('$token_rx','$phone')";
+
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Records inserted successfully.";
+                $ussd_text = "Token successfully added!";
+                ussd_stop($ussd_text);
+                $level = "token_rx_end";
+                updateSessions(session_id, $level);
+
+            }
+            else
+            {
+                //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+
+            }
+            // Close connection
+            mysqli_close($link);
         }
-        // Close connection
-        mysqli_close($link);
 
     }
     else if ($level == "accounts_reg" && $ussd_string_exploded == "4")
@@ -309,39 +343,50 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "new_account" && $ussd_string_exploded !== '')
     {
-        $account = $ussd_string;
-
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        // Check connection
-        if ($link === false)
+        if (empty($ussd_string_exploded))
         {
-            die("ERROR: Could not connect. " . mysqli_connect_error());
-        }
-
-        $sql = "INSERT INTO accounts " . "(account_number,phone_number) " . "VALUES " . "('$account','$phone')";
-
-        if (mysqli_query($link, $sql))
-        {
-            //echo "Records inserted successfully.";
-            $ussd_text = "Account successfully added!";
-            ussd_stop($ussd_text);
-            $level = "account_end";
-            updateSessions(session_id, $level);
-
+            $ussd_text = "Please enter account number";
+            $level = "new_account";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
         }
         else
         {
-            //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+            $account = $ussd_string;
 
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            // Check connection
+            if ($link === false)
+            {
+                die("ERROR: Could not connect. " . mysqli_connect_error());
+            }
+
+            $sql = "INSERT INTO accounts " . "(account_number,phone_number) " . "VALUES " . "('$account','$phone')";
+
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Records inserted successfully.";
+                $ussd_text = "Account successfully added!";
+                ussd_stop($ussd_text);
+                $level = "account_end";
+                updateSessions(session_id, $level);
+
+            }
+            else
+            {
+                //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+
+            }
+            // Close connection
+            mysqli_close($link);
         }
-        // Close connection
-        mysqli_close($link);
+
     }
     else if ($level == "accounts_reg" && $ussd_string_exploded == "5")
     {
@@ -353,38 +398,49 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "tv_account" && $ussd_string_exploded !== '')
     {
-        $tv_account = $ussd_string;
-
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        // Check connection
-        if ($link === false)
+        if (empty($ussd_string_exploded))
         {
-            die("ERROR: Could not connect. " . mysqli_connect_error());
-        }
-
-        $sql = "INSERT INTO tv_accounts " . "(tv_account,phone_number) " . "VALUES " . "('$tv_account','$phone')";
-
-        if (mysqli_query($link, $sql))
-        {
-            //echo "Records inserted successfully.";
-            $ussd_text = "TV Account successfully added!";
-            ussd_stop($ussd_text);
-            $level = "tv_account_end";
-            updateSessions(session_id, $level);
+            $ussd_text = "Please add TV number";
+            $level = "tv_account";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
         }
         else
         {
-            //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+            // code...
+            $tv_account = $ussd_string;
 
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            // Check connection
+            if ($link === false)
+            {
+                die("ERROR: Could not connect. " . mysqli_connect_error());
+            }
+
+            $sql = "INSERT INTO tv_accounts " . "(tv_account,phone_number) " . "VALUES " . "('$tv_account','$phone')";
+
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Records inserted successfully.";
+                $ussd_text = "TV Account successfully added!";
+                ussd_stop($ussd_text);
+                $level = "tv_account_end";
+                updateSessions(session_id, $level);
+            }
+            else
+            {
+                //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+
+            }
+            // Close connection
+            mysqli_close($link);
         }
-        // Close connection
-        mysqli_close($link);
 
     }
     else if ($level == "accounts_reg" && $ussd_string_exploded == "6")
@@ -483,22 +539,32 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "repair_request" && $ussd_string_exploded !== '')
     {
 
-        $repair_request = $ussd_string;
-        $level = "repairs_end";
-        $ussd_text = "Thank you. Request received. Our agents will be in touch";
-        ussd_stop($ussd_text);
-        repairs($repair_request, $phone);
-        updateSessions($session_id, $level);
+        if (empty($ussd_string_exploded))
+        {
+            $ussd_text = "please enter nature of your request";
+            $level = "repair_request";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
+        }
+        else
+        {
+            // code...
+            $repair_request = $ussd_string;
+            $level = "repairs_end";
+            $ussd_text = "Thank you. Request received. Our agents will be in touch";
+            ussd_stop($ussd_text);
+            repairs($repair_request, $phone);
+            updateSessions($session_id, $level);
+        }
 
     }
     else if ($level == "repairs" && $ussd_string_exploded == "2")
     {
 
-        $ussd_text = "Please be patient abit,the service center locations will be published here.";
+        $ussd_text = "Please be patient abit, our service center locations will be published here.";
         ussd_stop($ussd_text);
         $level = "sc_locations";
         updateSessions($session_id, $level);
-        //updateSessions($session_id,$level);
 
     }
     else if ($level == "register_menu" && $ussd_string_exploded == "1")
@@ -514,61 +580,86 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "verify_id" && $ussd_string_exploded !== '')
     {
 
-        $reg_id = $ussd_string;
-        $level = "account_information";
-        $ussd_text = "Please enter account number";
-        ussd_proceed($ussd_text);
-        updateSessions($session_id, $level);
-
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  ussd_users " . "SET national_id='$reg_id' where phone_number='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $level = "verify_id";
+            $ussd_text = "Please enter National ID";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
+            register_ussd($reg_id, $account_information, $phone);
         }
         else
         {
+            // code...
+            $reg_id = $ussd_string;
 
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  ussd_users " . "SET national_id='$reg_id' where phone_number='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $level = "account_information";
+                $ussd_text = "Please enter account number";
+                ussd_proceed($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
 
     }
     else if ($level == "account_information" && $ussd_string_exploded !== '')
     {
 
-        $account_details = $ussd_string;
-        $ussd_text = "Thanks for registering for USSD. Please dial *239# go start using the USSD App.";
-        $level = "ussd_reg_end";
-        ussd_stop($ussd_text);
-        updateSessions($session_id, $level);
-
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  ussd_users " . "SET account_num='$account_details' where phone_number='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $level = "account_information";
+            $ussd_text = "Please enter account number";
+            ussd_proceed($ussd_text);
+            updateSessions($session_id, $level);
         }
         else
         {
+            // code...
+            $account_details = $ussd_string;
+
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  ussd_users " . "SET account_num='$account_details' where phone_number='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Thanks for registering for USSD. Please dial *239# To start using the USSD App.";
+                $level = "ussd_reg_end";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+
+            mysqli_close($link);
 
         }
-        mysqli_close($link);
 
     }
     else if ($level == "register_menu" && $ussd_string_exploded == "2")
@@ -590,59 +681,70 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "view_balance" && $ussd_string_exploded !== "")
     {
 
-        $acc_number = $ussd_string;
-        //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/accountinformation';
-        $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/accountinformation';
-        //$account_number = $ussd_string_exploded;
-        $ch = curl_init($url);
-
-        $data = array(
-            'account_number' => $acc_number,
-            'MSISDN' => $phone
-        );
-
-        $payload = json_encode($data);
-
-        // Attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-        // Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type:application/json'
-        ));
-
-        // Return response instead of outputting
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute the POST request
-        $result = curl_exec($ch);
-
-        $json_resp = json_decode($result, true);
-        $status = $json_resp['status'];
-
-        //echo "\n".$json_resp;
-        if ($status == "OK")
+        if (empty($ussd_string_exploded))
         {
-
-            $total_paid = $json_resp['account_information']['total_paid'];
-            $remaining_due = $json_resp['account_information']['remaining_due'];
-            $token_expiration = $json_resp['account_information']['token_expiration'];
-            $ussd_text = "Total Paid:" . $total_paid . "\n";
-            $ussd_text .= "Remaining Due:" . $remaining_due . "\n";
-            //$ussd_text .="Token Expiration:".$taken_expiration;
-            $level = "account_balance";
-            ussd_stop($ussd_text);
+            $ussd_text = "Please enter your account number";
+            $level = "view_balance";
+            ussd_proceed($ussd_text);
             updateSessions($session_id, $level);
         }
-
-        if ($status == "FAILED")
+        else
         {
+            $acc_number = $ussd_string;
+            //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/accountinformation';
+            $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/accountinformation';
+            //$account_number = $ussd_string_exploded;
+            $ch = curl_init($url);
 
-            $description = $json_resp['description'];
-            $ussd_text = $description;
-            $level = "account_balance";
-            ussd_stop($ussd_text);
-            updateSessions($session_id, $level);
+            $data = array(
+                'account_number' => $acc_number,
+                'MSISDN' => $phone
+            );
+
+            $payload = json_encode($data);
+
+            // Attach encoded JSON string to the POST fields
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+            // Set the content type to application/json
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type:application/json'
+            ));
+
+            // Return response instead of outputting
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Execute the POST request
+            $result = curl_exec($ch);
+
+            $json_resp = json_decode($result, true);
+            $status = $json_resp['status'];
+
+            //echo "\n".$json_resp;
+            if ($status == "OK")
+            {
+
+                $total_paid = $json_resp['account_information']['total_paid'];
+                $remaining_due = $json_resp['account_information']['remaining_due'];
+                $token_expiration = $json_resp['account_information']['token_expiration'];
+                $ussd_text = "Total Paid:" . $total_paid . "\n";
+                $ussd_text .= "Remaining Due:" . $remaining_due . "\n";
+                //$ussd_text .="Token Expiration:".$taken_expiration;
+                $level = "account_balance";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+            }
+
+            if ($status == "FAILED")
+            {
+
+                $description = $json_resp['description'];
+                $ussd_text = $description;
+                $level = "account_balance";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
 
         }
 
@@ -659,57 +761,69 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "token_exp" && $ussd_string_exploded !== '')
     {
 
-        $acc_num = $ussd_string;
-        $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/accountinformation';
-        #$url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
-        //$account_number = $ussd_string_exploded;
-        $ch = curl_init($url);
-
-        $data = array(
-            'account_number' => $acc_num,
-            'MSISDN' => $phone
-        );
-
-        $payload = json_encode($data);
-
-        // Attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-        // Set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type:application/json'
-        ));
-
-        // Return response instead of outputting
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute the POST request
-        $result = curl_exec($ch);
-
-        $json_resp = json_decode($result, true);
-        $status = $json_resp['status'];
-
-        //echo "\n".$json_resp;
-        if ($status == "OK")
+        if (empty($ussd_string_exploded))
         {
-
-            $total_paid = $json_resp['account_information']['total_paid'];
-            $remaining_due = $json_resp['account_information']['remaining_due'];
-            $token_expiration = $json_resp['account_information']['token_expiration'];
-            $ussd_text .= "Token Expiration:" . $token_expiration;
-            $level = "token_exp_end";
-            ussd_stop($ussd_text);
+            $ussd_text = "Please enter your account number";
+            $level = "token_exp";
+            ussd_proceed($ussd_text);
             updateSessions($session_id, $level);
         }
-
-        if ($status == "FAILED")
+        else
         {
+            // code...
+            $acc_num = $ussd_string;
+            $url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/accountinformation';
+            #$url = 'https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/lasttokens';
+            //$account_number = $ussd_string_exploded;
+            $ch = curl_init($url);
 
-            $description = $json_resp['description'];
-            $ussd_text = $description;
-            $level = "token_exp_end";
-            ussd_stop($ussd_text);
-            updateSessions($session_id, $level);
+            $data = array(
+                'account_number' => $acc_num,
+                'MSISDN' => $phone
+            );
+
+            $payload = json_encode($data);
+
+            // Attach encoded JSON string to the POST fields
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+            // Set the content type to application/json
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type:application/json'
+            ));
+
+            // Return response instead of outputting
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // Execute the POST request
+            $result = curl_exec($ch);
+
+            $json_resp = json_decode($result, true);
+            $status = $json_resp['status'];
+
+            //echo "\n".$json_resp;
+            if ($status == "OK")
+            {
+
+                $total_paid = $json_resp['account_information']['total_paid'];
+                $remaining_due = $json_resp['account_information']['remaining_due'];
+                $token_expiration = $json_resp['account_information']['token_expiration'];
+                $ussd_text .= "Token Expiration:" . $token_expiration;
+                $level = "token_exp_end";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+            }
+
+            if ($status == "FAILED")
+            {
+
+                $description = $json_resp['description'];
+                $ussd_text = $description;
+                $level = "token_exp_end";
+                ussd_stop($ussd_text);
+                updateSessions($session_id, $level);
+
+            }
 
         }
 
@@ -721,7 +835,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         ussd_proceed($ussd_text);
         $level = "firstname";
         updateSessions($session_id, $level);
-      
+
         //insert the first record in the database
         register_wrt($first_name, $last_name, $national_id, $phone, $product_name, $serial_number, $county, $dealer_id);
 
@@ -729,216 +843,285 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "firstname" && $ussd_string_exploded !== '')
     {
 
-        $firstname = $ussd_string;
-        //insert the first name here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET fname='$firstname' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
+
+            $ussd_text = "Please enter your first name.";
+            ussd_proceed($ussd_text);
+            $level = "firstname";
+            updateSessions($session_id, $level);
+            //insert the first record in the database
+            register_wrt($first_name, $last_name, $national_id, $phone, $product_name, $serial_number, $county, $dealer_id);
 
         }
         else
         {
+            // code...
+            $firstname = $ussd_string;
+            //insert the first name here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
 
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET fname='$firstname' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter your last name.";
+                ussd_proceed($ussd_text);
+                $level = "lastname";
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-
-        $ussd_text = "Please enter your last name.";
-        ussd_proceed($ussd_text);
-        $level = "lastname";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "lastname" && $ussd_string_exploded !== '')
     {
 
-        $lastname = $ussd_string;
-        //insert the last name here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET lname='$lastname' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter your last name.";
+            ussd_proceed($ussd_text);
+            $level = "lastname";
+            updateSessions($session_id, $level);
         }
         else
         {
+            // code...
+            $lastname = $ussd_string;
+            //insert the last name here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
 
+            $sql = "UPDATE  customer_kyc " . "SET lname='$lastname' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter Product name.";
+                ussd_proceed($ussd_text);
+                $level = "productname";
+                updateSessions($session_id, $level);
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-
-        $ussd_text = "Please enter Product name.";
-        ussd_proceed($ussd_text);
-        $level = "productname";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "productname" && $ussd_string_exploded !== '')
     {
 
-        $product_name = $ussd_string;
-
-        //insert the product name here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET pname='$product_name' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter Product name.";
+            ussd_proceed($ussd_text);
+            $level = "productname";
+            updateSessions($session_id, $level);
         }
         else
         {
+            $product_name = $ussd_string;
+            //insert the product name here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
+
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET pname='$product_name' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter serial number.";
+                ussd_proceed($ussd_text);
+                $level = "serial_number";
+                updateSessions($session_id, $level);
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
 
         }
-        mysqli_close($link);
-
-        $ussd_text = "Please enter serial number.";
-        ussd_proceed($ussd_text);
-        $level = "serial_number";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "serial_number" && $ussd_string_exploded !== '')
     {
 
-        $serial_number = $ussd_string;
-        //insert serial number here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET serial_num='$serial_number' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter serial number.";
+            ussd_proceed($ussd_text);
+            $level = "serial_number";
+            updateSessions($session_id, $level);
         }
         else
         {
+            // code...
+            $serial_number = $ussd_string;
+            //insert serial number here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
 
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET serial_num='$serial_number' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter National ID Number";
+                ussd_proceed($ussd_text);
+                $level = "national_id";
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-
-        $ussd_text = "Please enter National ID Number";
-        ussd_proceed($ussd_text);
-        $level = "national_id";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "national_id" && $ussd_string_exploded !== '')
     {
 
-        $national_id = $ussd_string;
-
-        //insert national ID here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET national_id='$national_id' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter National ID Number";
+            ussd_proceed($ussd_text);
+            $level = "national_id";
+            updateSessions($session_id, $level);
         }
         else
         {
+            // code...
+            $national_id = $ussd_string;
+            //insert national ID here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
 
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET national_id='$national_id' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter county";
+                ussd_proceed($ussd_text);
+                $level = "county";
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-        $ussd_text = "Please enter county";
-        ussd_proceed($ussd_text);
-        $level = "county";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "county" && $ussd_string_exploded !== '')
     {
-
-        $county = $ussd_string;
-        //insert dealer id here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET county='$county' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter county";
+            ussd_proceed($ussd_text);
+            $level = "county";
+            updateSessions($session_id, $level);
         }
         else
         {
+            // code...
+            $county = $ussd_string;
+            //insert dealer id here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
 
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET county='$county' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $ussd_text = "Please enter Dealer ID Number";
+                ussd_proceed($ussd_text);
+                $level = "dealer_id";
+                updateSessions($session_id, $level);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-
-        $ussd_text = "Please enter Dealer ID Number";
-        ussd_proceed($ussd_text);
-        $level = "dealer_id";
-        updateSessions($session_id, $level);
 
     }
     else if ($level == "dealer_id" && $ussd_string_exploded !== '')
     {
 
-        $dealer_id = $ussd_string;
-        //insert dealer id here
-        $dbhost = 'localhost';
-        $dbuser = 'ussd';
-        $dbpass = 'ussd123!';
-        $dbname = 'ussd';
-
-        $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
-
-        $sql = "UPDATE  customer_kyc " . "SET dealer_id='$dealer_id' where msisdn='$phone'";
-        log($sql);
-        if (mysqli_query($link, $sql))
+        if (empty($ussd_string_exploded))
         {
-            //echo "Record was updated successfully.";
-
+            $ussd_text = "Please enter Dealer ID Number";
+            ussd_proceed($ussd_text);
+            $level = "dealer_id";
+            updateSessions($session_id, $level);
         }
         else
         {
+            $dealer_id = $ussd_string;
+            //insert dealer id here
+            $dbhost = 'localhost';
+            $dbuser = 'ussd';
+            $dbpass = 'ussd123!';
+            $dbname = 'ussd';
 
+            $link = mysqli_connect("localhost", "ussd", "ussd123!", "ussd");
+
+            $sql = "UPDATE  customer_kyc " . "SET dealer_id='$dealer_id' where msisdn='$phone'";
+            log($sql);
+            if (mysqli_query($link, $sql))
+            {
+                //echo "Record was updated successfully.";
+                $level = "reg_end";
+                customer_kyc($level, $session_id);
+
+            }
+            else
+            {
+
+            }
+            mysqli_close($link);
         }
-        mysqli_close($link);
-
-        $level = "reg_end";
-        customer_kyc($level, $session_id);
 
     }
 
@@ -1267,7 +1450,7 @@ function customer_kyc($level, $session_id)
                 $phone = $res['msisdn'];
 
                 //$url = 'https://3.19.212.163:9443/CSPortalToV2/stg/mtech/ussd/warranty';
-		$url ="https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/warranty";
+                $url = "https://coregateway.staging.dlight.com/coreserviceussdapi/mtnuganda/ussd/warranty";
 
                 $ch = curl_init($url);
 

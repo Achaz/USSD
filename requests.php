@@ -114,7 +114,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "view_tokens" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $level = "view_tokens";
             $ussd_text = "Please Enter Account Number:";
@@ -192,7 +192,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == 'view_tv_tokens' && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $level = "view_tv_tokens";
             $ussd_text = "Please Enter Account number:";
@@ -288,7 +288,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "add_token" && $ussd_string_exploded !== '')
     {
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter token number;";
             $level = "add_token";
@@ -343,7 +343,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "new_account" && $ussd_string_exploded !== '')
     {
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter account number";
             $level = "new_account";
@@ -398,7 +398,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "tv_account" && $ussd_string_exploded !== '')
     {
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please add TV number";
             $level = "tv_account";
@@ -539,7 +539,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "repair_request" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "please enter nature of your request";
             $level = "repair_request";
@@ -580,7 +580,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "verify_id" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $level = "verify_id";
             $ussd_text = "Please enter National ID";
@@ -622,7 +622,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "account_information" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $level = "account_information";
             $ussd_text = "Please enter account number";
@@ -681,7 +681,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "view_balance" && $ussd_string_exploded !== "")
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter your account number";
             $level = "view_balance";
@@ -761,7 +761,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "token_exp" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter your account number";
             $level = "token_exp";
@@ -843,7 +843,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "firstname" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
 
             $ussd_text = "Please enter your first name.";
@@ -888,7 +888,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "lastname" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter your last name.";
             ussd_proceed($ussd_text);
@@ -927,7 +927,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "productname" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter Product name.";
             ussd_proceed($ussd_text);
@@ -967,7 +967,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "serial_number" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter serial number.";
             ussd_proceed($ussd_text);
@@ -1008,7 +1008,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "national_id" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter National ID Number";
             ussd_proceed($ussd_text);
@@ -1048,7 +1048,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     }
     else if ($level == "county" && $ussd_string_exploded !== '')
     {
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter county";
             ussd_proceed($ussd_text);
@@ -1089,7 +1089,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "dealer_id" && $ussd_string_exploded !== '')
     {
 
-        if (empty($ussd_string_exploded))
+        if (empty($ussd_string))
         {
             $ussd_text = "Please enter Dealer ID Number";
             ussd_proceed($ussd_text);

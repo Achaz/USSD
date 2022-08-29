@@ -6,7 +6,7 @@
 */
 
 // Print the response as plain text so that the gateway can read it
-header('Content-type: text/plain');
+#header('Content-type: text/plain');
 
 // Get the parameters provided by Airtel's USSD gateway
 $phone = $_GET['phoneNumber'];
@@ -86,6 +86,12 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         sessions($phone, $session_id, $serviceCode, $level);
 
     }
+    else if ($level == "luganda" && $ussd_string_exploded == "0")
+    {
+        home_menu();
+        $level = "language_menu";
+        sessions($phone, $session_id, $serviceCode, $level);
+    }
     else if ($level == "language_menu" && $ussd_string_exploded == "3")
     {
 
@@ -102,6 +108,12 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         updateSessions($session_id, $level);
 
     }
+    else if ($level == 'tokens' && $ussd_string_exploded == '0')
+    {
+        registered_menu();
+        $level = "registered_menu";
+        updateSessions($session_id, $level);
+    }
     else if ($level == 'tokens' && $ussd_string_exploded == '1')
     {
 
@@ -110,6 +122,12 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         ussd_proceed($ussd_text);
         updateSessions($session_id, $level);
 
+    }
+    else if ($level == 'view_tokens' && $ussd_string_exploded == '0')
+    {
+        registered_menu();
+        $level = "registered_menu";
+        updateSessions($session_id, $level);
     }
     else if ($level == "view_tokens" && $ussd_string_exploded !== '')
     {
@@ -188,6 +206,13 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         ussd_proceed($ussd_text);
         updateSessions($session_id, $level);
 
+    }
+    else if ($level == 'view_tv_tokens' && $ussd_string_exploded == '0')
+    {
+
+        registered_menu();
+        $level = "registered_menu";
+        updateSessions($session_id, $level);
     }
     else if ($level == 'view_tv_tokens' && $ussd_string_exploded !== '')
     {
@@ -327,7 +352,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
             else
             {
                 //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+                
             }
             // Close connection
             mysqli_close($link);
@@ -381,7 +406,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
             else
             {
                 //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+                
             }
             // Close connection
             mysqli_close($link);
@@ -436,7 +461,7 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
             else
             {
                 //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+                
             }
             // Close connection
             mysqli_close($link);
@@ -561,11 +586,17 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
     else if ($level == "repairs" && $ussd_string_exploded == "2")
     {
 
-        $ussd_text = "Please be patient abit, our service center locations will be published here.";
+        $ussd_text = "Please be patient abit, our service center locations will be published here. \nPlease Press 0 to go back";
         ussd_stop($ussd_text);
         $level = "sc_locations";
         updateSessions($session_id, $level);
 
+    }
+    else if ($level == "repairs" && $ussd_string_exploded == "0")
+    {
+        registered_menu();
+        $level = "registered_menu";
+        updateSessions($session_id, $level);
     }
     else if ($level == "register_menu" && $ussd_string_exploded == "1")
     {
@@ -668,6 +699,12 @@ if (isset($phone) && isset($session_id) && isset($serviceCode) && isset($ussd_st
         $level = "view_account";
         view_account($session_id, $level);
 
+    }
+    else if ($level =="view_account" && $ussd_string_exploded =="0")
+    {
+        register_menu();
+        $level = "register_menu";
+        updateSessions($session_id, $level);
     }
     else if ($level == "view_account" && $ussd_string_exploded == "1")
     {
@@ -1154,7 +1191,7 @@ function check_registration($phone)
             return $account_number;
             // Close result set
             //mysqli_free_result($result);
-
+            
         }
         else
         {
@@ -1178,7 +1215,8 @@ function logs($msg)
 {
 
     $logfile = 'logs/log_' . date('d-M-Y') . '.log';
-    file_put_contents($logfile, $msg . "\n", FILE_APPEND);
+    //file_put_contents($logfile, $msg . "\n", FILE_APPEND);
+    
 }
 
 /* The ussd_proceed function appends CON to the USSD response your application gives.
@@ -1190,7 +1228,6 @@ function ussd_proceed($ussd_text)
 {
     header('HTTP/1.1 200 OK');
     header('Server: Apache-Coyote/1.1');
-    header('Path=/application_uri');
     header('Freeflow: FC');
     header('charge: Y');
     header('amount: 100');
@@ -1199,7 +1236,7 @@ function ussd_proceed($ussd_text)
     header('Cache-Control: max-age=0');
     header('Content-Type: UTF-8');
 
-    echo "$ussd_text";
+    echo ("$ussd_text");
 }
 
 /* This ussd_stop function appends END to the USSD response your application gives.
@@ -1211,7 +1248,6 @@ function ussd_stop($ussd_text)
 {
     header('HTTP/1.1 200 OK');
     header('Server: Apache-Coyote/1.1');
-    header('Path=/application_uri');
     header('Freeflow: FB');
     header('charge: Y');
     header('amount: 100');
@@ -1220,12 +1256,12 @@ function ussd_stop($ussd_text)
     header('Cache-Control: max-age=0');
     header('Content-Type: UTF-8');
 
-    echo "$ussd_text";
+    echo ("$ussd_text");
 }
 
 function luganda_menu()
 {
-    $ussd_text = "Dear Customer, the luganda menu will be coming soon.";
+    $ussd_text = "Dear Customer, the luganda menu will be coming soon.\n0. Back";
     ussd_stop($ussd_text);
 }
 
@@ -1276,7 +1312,7 @@ function tokens($level, $session_id)
     $ussd_text = "Dear customer, welcome to the tokens menu.\n";
     $ussd_text .= "Please select type of token to view;\n";
     $ussd_text .= "\n";
-    $ussd_text .= "1.View Token\n2.View TV Token";
+    $ussd_text .= "1.View Token\n2.View TV Token\n0.Back";
     ussd_proceed($ussd_text);
 }
 
@@ -1291,14 +1327,14 @@ function accounts($sessions_id, $level)
     $ussd_text = "Welcome to the accounts menu.";
     $ussd_text .= " Please select option;\n";
     $ussd_text .= "\n";
-    $ussd_text .= "1. Balance\n2. Token Expiry\n3. Add Token rx\n4. Add Account\n5. Add TV account\n6. Warranty";
+    $ussd_text .= "1. Balance\n2. Token Expiry\n3. Add Token rx\n4. Add Account\n5. Add TV account\n6. Warranty\n0. Back";
     updateSessions($session_id, $level);
     ussd_proceed($ussd_text);
 }
 
 function repair_menu($session_id, $level)
 {
-    $ussd_text = "1.Repair request\n2.Service Center location";
+    $ussd_text = "1.Repair request\n2.Service Center location\n0.Back\n00.Home";
     updateSessions($session_id, $level);
     ussd_proceed($ussd_text);
 }
@@ -1308,7 +1344,7 @@ function view_account($session_id, $level)
 
     $ussd_text = "Welcome to the accounts menu.Please choose an option below;";
     $ussd_text .= "\n";
-    $ussd_text .= "1.Balance\n2.Token expiry";
+    $ussd_text .= "1.Balance\n2.Token expiry\n0.Back";
     updateSessions($session_id, $level);
     ussd_proceed($ussd_text);
 
@@ -1335,12 +1371,12 @@ function register_ussd($reg_id, $account_information, $phone)
     if (mysqli_query($link, $sql))
     {
         //echo "Records inserted successfully.";
-
+        
     }
     else
     {
         //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+        
     }
     // Close connection
     mysqli_close($link);
@@ -1368,12 +1404,12 @@ function repairs($requests, $phone)
     if (mysqli_query($link, $sql))
     {
         //echo "Records inserted successfully.";
-
+        
     }
     else
     {
         //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+        
     }
     // Close connection
     mysqli_close($link);
@@ -1401,12 +1437,12 @@ function register_wrt($first_name, $last_name, $national_id, $msisdn, $product_n
     if (mysqli_query($link, $sql))
     {
         //echo "Records inserted successfully.";
-
+        
     }
     else
     {
         //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+        
     }
     // Close connection
     mysqli_close($link);
@@ -1508,7 +1544,7 @@ function customer_kyc($level, $session_id)
             return $level;
             // Close result set
             //mysqli_free_result($result);
-
+            
         }
         else
         {
@@ -1549,12 +1585,12 @@ function sessions($phone, $session_id, $serviceCode, $level)
     if (mysqli_query($link, $sql))
     {
         //echo "Records inserted successfully.";
-
+        
     }
     else
     {
         //echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-
+        
     }
 
     // Close connection
@@ -1588,7 +1624,7 @@ function checkSessions($phone, $session_id)
             return $level;
             // Close result set
             //mysqli_free_result($result);
-
+            
         }
         else
         {
@@ -1622,7 +1658,7 @@ function updateSessions($session_id, $level)
     if (mysqli_query($link, $sql))
     {
         //echo "Record was updated successfully.";
-
+        
     }
     else
     {
@@ -1633,3 +1669,4 @@ function updateSessions($session_id, $level)
 }
 
 ?>
+
